@@ -44,6 +44,15 @@
                             <Width>520</Width>
                         </MaxSize>
                     </Geometry>
+                    <!-- Ícone do painel recolhido na doca. PNG 23x23 + @2X (46x46),
+                         gerados por tools/make-icons.js. Normal/RollOver = temas
+                         claros da UI; Dark* = temas escuros. -->
+                    <Icons>
+                        <Icon Type="Normal">./icons/icon-normal.png</Icon>
+                        <Icon Type="RollOver">./icons/icon-rollover.png</Icon>
+                        <Icon Type="DarkNormal">./icons/icon-dark-normal.png</Icon>
+                        <Icon Type="DarkRollOver">./icons/icon-dark-rollover.png</Icon>
+                    </Icons>
                 </UI>
             </DispatchInfo>
         </Extension>

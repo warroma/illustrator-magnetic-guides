@@ -10,18 +10,48 @@ AutoGrids). A matemática agora é a do vídeo de referência (campo de distânc
 generalizada para qualquer forma e qualquer quantidade. Os cálculos estão em
 [docs/CALCULOS.md](docs/CALCULOS.md).
 
-## Instalar (máquina de desenvolvimento)
+## Instalar
+
+<p align="center">
+  <a href="https://github.com/warroma/illustrator-magnetic-guides/releases/latest/download/AutoLiquid-Instalador-Windows.exe"><b>⬇ Baixar para Windows</b></a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/warroma/illustrator-magnetic-guides/releases/latest/download/AutoLiquid-Instalador-macOS.dmg"><b>⬇ Baixar para macOS</b></a>
+  <br><sub>todas as versões em <a href="https://github.com/warroma/illustrator-magnetic-guides/releases">Releases</a></sub>
+</p>
+
+1. **Baixe** o instalador do seu sistema (links acima).
+2. **Abra o arquivo.** Como ele não é assinado digitalmente, o sistema avisa na primeira vez:
+   - **Windows**: "O Windows protegeu seu PC". Clique em **Mais informações** e depois em
+     **Executar assim mesmo**.
+   - **macOS**: "desenvolvedor não identificado". Clique com o botão direito no app, **Abrir**, e
+     confirme em **Abrir**.
+3. Clique em **Instalar painel** (ou **Atualizar painel**, se o AutoLiquid 1 estiver instalado:
+   é a mesma pasta, `com.autoliquid.panel`, e ela é substituída inteira).
+4. **Feche o Illustrator por completo e abra de novo**: ele só carrega o painel ao abrir.
+5. Abra o painel em **Janela > Extensões > AutoLiquid**. Recolhido na doca, ele aparece com o
+   ícone de duas gotas se fundindo.
+
+O instalador copia o painel para `%APPDATA%\Adobe\CEP\extensions` (Windows) ou
+`~/Library/Application Support/Adobe/CEP/extensions` (macOS) e liga o `PlayerDebugMode` do CEP
+(CSXS 9 a 12), a chave que deixa o Illustrator carregar painéis sem assinatura. Não acessa a
+internet nem pede administrador. Detalhes e cenários (instalar, atualizar, reinstalar, voltar
+versão) em [installer/README.md](installer/README.md). O instalador do macOS é gerado pelo
+mesmo workflow, mas ainda não foi testado num Mac.
+
+**Desinstalar:** apague a pasta `com.autoliquid.panel` de dentro da pasta de extensões acima e
+reinicie o Illustrator.
+
+### Na máquina de desenvolvimento
 
 ```bash
 node tools/install-panel.js --install
 ```
 
-Feche e abra o Illustrator; o painel fica em **Janela > Extensões > AutoLiquid**. Ele instala por
-cima do AutoLiquid 1 (mesmo id); a versão anterior vai para `_backup/`. O modo de extensões não
-assinadas (`PlayerDebugMode`) já está ligado nesta máquina por causa do AutoGrids.
-
-`--dev` liga também a porta de depuração remota (`localhost:8098`), usada pelos testes
-automáticos do painel.
+Copia `panel/` direto do repositório (sincronizando antes o motor e o host). Se a versão
+instalada for outra, ela vai para `_backup/`. `--dev` liga também a porta de depuração remota
+(`localhost:8098`, arquivo `.debug`), usada pelos testes automáticos do painel. O instalador
+nunca leva esse arquivo, e rodá-lo por cima de uma instalação `--dev` apaga o `.debug` (para
+voltar, rode de novo com `--install --dev`).
 
 ## Usar
 
@@ -96,6 +126,9 @@ node tests/harness.js
   conectar no alcance, parâmetros, desfazer/refazer, girar, editar âncora, cor, duplicar,
   expandir, desfazer líquido, carga com 40 círculos).
 - `tools/latency.js`: latência ponta a ponta com o painel no comando.
+- `cd installer && npm test`: lógica do instalador (detecção, instalar/atualizar/reinstalar,
+  `.debug` fora, troca que falha no meio) e conferência de `panel/` antes de empacotar (id,
+  versão, ícones, cópias do motor iguais às fontes).
 
 ## Desempenho medido (Illustrator 30.8, esta máquina)
 
@@ -129,10 +162,28 @@ engine/liquid-core.js        motor: SDF, curvas, contorno, bézier (Node e paine
 engine/liquid-controller.js  vigiar → ler → calcular → escrever (Node e painel)
 host/liquid-host.jsx         lado Illustrator (ExtendScript)
 panel/                       extensão CEP (js/ e jsx/ recebem cópias via tools/install-panel.js)
+panel/icons/                 ícone do painel recolhido (gerado por tools/make-icons.js)
+installer/                   instalador Electron (Windows/macOS) que empacota panel/
 cli/                         script por COM + bateria de validação
-tools/                       instalador, ponte COM, depuração do painel, latência, exportar PNG
+tools/                       instalação de dev, ícones, ponte COM, depuração do painel, latência, exportar PNG
 tests/                       harness do motor e teste do JSON do host
 probes/                      sondas de capacidade/custo do Illustrator usadas nas decisões
 docs/CALCULOS.md             os cálculos, com medidas
+docs/release-notes/          notas de cada release (usadas pelo workflow)
+.github/workflows/release.yml  gera os instaladores e publica a release a cada tag vX.Y.Z
 relatorio/                   comparativo visual das curvas e PNGs de conferência
 ```
+
+## Publicar uma versão
+
+1. Suba a versão em `ExtensionBundleVersion` (e no `Version` da extensão) no
+   [`panel/CSXS/manifest.xml`](panel/CSXS/manifest.xml) e em `installer/package.json`. O
+   instalador compara essa versão com a instalada para decidir entre instalar, atualizar ou
+   reinstalar, e `npm test` falha se as duas não baterem.
+2. Escreva as notas em `docs/release-notes/vX.Y.Z.md`.
+3. Empurre a tag: `git tag vX.Y.Z` e `git push origin vX.Y.Z`. O workflow
+   [`release.yml`](.github/workflows/release.yml) roda os testes, monta o `.exe` (Windows) e o
+   `.dmg` (macOS) e publica a release; os links de download acima apontam sempre para a última.
+
+Para gerar o instalador do Windows localmente: `cd installer && npm install && npm run dist`
+(sai em `installer/dist/AutoLiquid-Instalador-Windows.exe`).
