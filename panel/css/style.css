@@ -1,0 +1,208 @@
+/* Mesmos tokens do AutoGrids (tema escuro do Illustrator). */
+:root {
+    --bg: #323232;
+    --bg-alt: #2b2b2b;
+    --bg-raised: #3f3f3f;
+    --border: #191919;
+    --text: #d6d6d6;
+    --text-dim: #969696;
+    --accent: #4a9eff;
+    --accent-text: #ffffff;
+    --field-bg: #464646;
+    --danger: #ff7a7a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 11px "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+button { font-family: inherit; }
+button:disabled { opacity: .45; cursor: default; }
+
+.app { padding: 14px; }
+
+/* ---- líquido ativo ---- */
+.liquid-bar {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--text-dim);
+    border-radius: 4px;
+    padding: 7px 10px 8px;
+    margin-bottom: 12px;
+}
+.liquid-bar.on { border-left-color: var(--accent); }
+.liquid-bar-top { display: flex; justify-content: space-between; align-items: baseline; }
+.caption {
+    color: var(--text-dim);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+}
+.count { color: var(--text-dim); font-size: 10px; }
+.liquid-name {
+    margin-top: 2px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.liquid-meta { margin-top: 2px; color: var(--text-dim); font-size: 10.5px; min-height: 14px; }
+
+/* ---- botões ---- */
+.primary {
+    width: 100%;
+    padding: 9px;
+    margin-bottom: 14px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    background: var(--accent);
+    color: var(--accent-text);
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.primary:hover:not(:disabled) { filter: brightness(1.08); }
+
+.actions { display: flex; gap: 8px; margin-top: 4px; }
+.actions button {
+    flex: 1;
+    padding: 8px 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 11px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+.actions button:hover:not(:disabled) { background: #474747; }
+
+.controls.off .field,
+.controls.off .advanced,
+.controls.off .unit-toggle { opacity: .45; pointer-events: none; }
+
+/* ---- toggle de unidade ---- */
+.unit-toggle {
+    display: flex;
+    margin-bottom: 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+}
+.unit-toggle button {
+    flex: 1;
+    background: var(--bg-alt);
+    color: var(--text-dim);
+    border: none;
+    border-right: 1px solid var(--border);
+    padding: 5px 0;
+    cursor: pointer;
+    font-size: 11px;
+}
+.unit-toggle button:last-child { border-right: none; }
+.unit-toggle button.active { background: var(--accent); color: var(--accent-text); }
+
+/* ---- campos / sliders ---- */
+.field { margin-bottom: 13px; }
+.field label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--text-dim);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+}
+.field label .hint { text-transform: none; letter-spacing: 0; opacity: .8; }
+.field-row { display: flex; align-items: center; gap: 6px; }
+.field-row input[type="range"] { flex: 1; min-width: 0; accent-color: var(--accent); }
+.field-row .num {
+    width: 50px;
+    background: var(--field-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-align: right;
+    padding: 3px 4px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+}
+.field-row .readout { width: 62px; background: transparent; border-color: transparent; color: var(--text-dim); }
+.unit-label { color: var(--text-dim); width: 18px; font-size: 10px; }
+.scale {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2px;
+    margin-right: 68px;
+    color: var(--text-dim);
+    font-size: 9.5px;
+}
+
+/* ---- avançado ---- */
+.advanced {
+    border-top: 1px solid var(--border);
+    margin: 4px 0 12px;
+    padding-top: 8px;
+}
+.advanced summary {
+    cursor: pointer;
+    color: var(--text-dim);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    margin-bottom: 10px;
+    user-select: none;
+}
+.kernel-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.kernel-grid button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 8px 4px 6px;
+    cursor: pointer;
+}
+.kernel-grid svg {
+    width: 40px;
+    height: 20px;
+    fill: none;
+    stroke: var(--text-dim);
+    stroke-width: 1.4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.kernel-grid span { font-size: 10px; color: var(--text-dim); }
+.kernel-grid button.active { background: rgba(74, 158, 255, 0.16); border-color: var(--accent); }
+.kernel-grid button.active svg { stroke: var(--accent); }
+.kernel-grid button.active span { color: var(--text); font-weight: 600; }
+
+/* ---- rodapé ---- */
+.live {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    color: var(--text-dim);
+    cursor: pointer;
+}
+.live input { accent-color: var(--accent); margin: 0; }
+
+#status { margin-top: 8px; color: var(--text-dim); min-height: 14px; font-size: 10.5px; }
+#status.error { color: var(--danger); }
+
+.tip {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    color: var(--text-dim);
+    line-height: 1.45;
+    font-size: 10.5px;
+}
+.tip strong { color: var(--text); font-weight: 600; }

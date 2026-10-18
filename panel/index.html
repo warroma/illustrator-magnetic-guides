@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <title>AutoLiquid</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="app">
+        <div class="liquid-bar" id="liquidBar">
+            <div class="liquid-bar-top">
+                <span class="caption">Líquido ativo</span>
+                <span class="count" id="liquidCount"></span>
+            </div>
+            <div class="liquid-name" id="liquidName">—</div>
+            <div class="liquid-meta" id="liquidMeta"></div>
+        </div>
+
+        <button id="createBtn" class="primary">Criar líquido com a seleção</button>
+
+        <div class="controls" id="controls">
+            <div class="unit-toggle" id="unitToggle">
+                <button data-unit="mm" class="active">mm</button>
+                <button data-unit="pt">pt</button>
+            </div>
+
+            <div class="field">
+                <label for="reach">Pregnância <span class="hint">— vão em que as formas se tocam</span></label>
+                <div class="field-row">
+                    <input type="range" id="reach" min="0" max="1000" step="1" value="300">
+                    <input type="text" id="reachVal" class="num">
+                    <span class="unit-label">mm</span>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="tension">Tensão <span class="hint">— forma da ponte</span></label>
+                <div class="field-row">
+                    <input type="range" id="tension" min="0" max="100" step="1" value="33">
+                    <span class="num readout" id="tensionVal">p 2,0</span>
+                </div>
+                <div class="scale"><span>Esticada</span><span>Mole</span></div>
+            </div>
+
+            <div class="field">
+                <label for="grow">Engordar <span class="hint">— cresce ou afina tudo</span></label>
+                <div class="field-row">
+                    <input type="range" id="grow" min="-20" max="20" step="0.25" value="0">
+                    <input type="text" id="growVal" class="num">
+                    <span class="unit-label">mm</span>
+                </div>
+            </div>
+
+            <details class="advanced" id="advanced">
+                <summary>Avançado</summary>
+                <div class="field">
+                    <label>Curva de fusão</label>
+                    <div class="kernel-grid" id="kernelGrid">
+                        <button data-kernel="poly" class="active" title="Smooth-min polinomial: solta exatamente no alcance, formas soltas ficam fiéis.">
+                            <svg viewBox="0 0 40 20"><path d="M2 10a6 6 0 1 0 12 0a6 6 0 1 0-12 0M26 10a6 6 0 1 0 12 0a6 6 0 1 0-12 0M13 7c4 2 10 2 14 0M13 13c4-2 10-2 14 0"/></svg>
+                            <span>Líquido</span>
+                        </button>
+                        <button data-kernel="root" title="A fórmula do vídeo/Desmos: tudo atrai tudo, nunca solta de vez.">
+                            <svg viewBox="0 0 40 20"><path d="M3 10c0-5 4-7 8-6s7 4 9 6c2-2 5-5 9-6s8 1 8 6s-4 7-8 6s-7-4-9-6c-2 2-5 5-9 6s-8-1-8-6"/></svg>
+                            <span>Magnética</span>
+                        </button>
+                        <button data-kernel="circ" title="Junção em arco de círculo — o mesmo resultado do truque Offset + Unir + Offset negativo.">
+                            <svg viewBox="0 0 40 20"><path d="M2 10a6 6 0 1 0 12 0a6 6 0 1 0-12 0M26 10a6 6 0 1 0 12 0a6 6 0 1 0-12 0M13 7a8 8 0 0 0 14 0M13 13a8 8 0 0 1 14 0"/></svg>
+                            <span>Filete</span>
+                        </button>
+                        <button data-kernel="hard" title="Só une o que se sobrepõe, sem ponte.">
+                            <svg viewBox="0 0 40 20"><path d="M2 10a6 6 0 1 0 12 0a6 6 0 1 0-12 0M26 10a6 6 0 1 0 12 0a6 6 0 1 0-12 0"/></svg>
+                            <span>Sem ponte</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="tol">Precisão do contorno</label>
+                    <div class="field-row">
+                        <input type="range" id="tol" min="0" max="100" step="1" value="50">
+                        <span class="num readout" id="tolVal">0,10 pt</span>
+                    </div>
+                    <div class="scale"><span>Fiel (mais âncoras)</span><span>Leve</span></div>
+                </div>
+            </details>
+
+            <div class="actions">
+                <button id="expandBtn" title="O contorno vira um path comum e as formas-fonte saem (Ctrl+Z traz de volta).">Expandir</button>
+                <button id="releaseBtn" title="Apaga o contorno e devolve as formas soltas.">Desfazer líquido</button>
+            </div>
+        </div>
+
+        <label class="live"><input type="checkbox" id="liveToggle" checked> Atualizar ao vivo</label>
+        <div id="status"></div>
+        <div class="tip">Para mover uma forma do líquido: dê <strong>dois cliques</strong> nele (modo isolamento) ou use a <strong>Seleção Direta (A)</strong>. Para adicionar formas, coloque-as dentro do grupo.</div>
+    </div>
+
+    <script src="./js/CSInterface.js"></script>
+    <script src="./js/liquid-core.js"></script>
+    <script src="./js/liquid-controller.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>
